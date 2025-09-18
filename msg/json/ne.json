@@ -148,7 +148,7 @@
 	"MATH_ROUND_OPERATOR_ROUNDDOWN": "सानो पूर्ण सङ्ख्या",
 	"MATH_ONLIST_OPERATOR_SUM": "सूचीको योगफल",
 	"MATH_ONLIST_TOOLTIP_SUM": "सूचीमा भएका सबै सङ्ख्याहरूको योगफल फर्काउनुहोस्।",
-	"MATH_ONLIST_OPERATOR_MIN": "सूचीको न्यूनतम",
+	"MATH_ONLIST_OPERATOR_MIN": "सूचीको न्युनतम",
 	"MATH_ONLIST_TOOLTIP_MIN": "सूचीमा सबैभन्दा सानो सङ्ख्या फर्काउनुहोस्।",
 	"MATH_ONLIST_OPERATOR_MAX": "सूचीको अधिकतम",
 	"MATH_ONLIST_TOOLTIP_MAX": "सूचीमा सबैभन्दा ठूलो सङ्ख्या फर्काउनुहोस्।",
