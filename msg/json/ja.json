@@ -379,6 +379,8 @@
 	"SHORTCUTS_GENERAL": "全般",
 	"SHORTCUTS_EDITING": "編集",
 	"SHORTCUTS_CODE_NAVIGATION": "コードナビゲーション",
+	"KEYBOARD_NAV_UNCONSTRAINED_MOVE_HINT": "%1を押した状態で方向キーを利用すると自由に移動し、%2で位置を確定します。",
+	"KEYBOARD_NAV_CONSTRAINED_MOVE_HINT": "方向キーで移動し、%1で位置を確定します。",
 	"KEYBOARD_NAV_COPIED_HINT": "コピーしました。貼り付けるには%1を押してください。",
 	"KEYBOARD_NAV_CUT_HINT": "切り取りました。貼り付けるには%1を押してください。"
 }
