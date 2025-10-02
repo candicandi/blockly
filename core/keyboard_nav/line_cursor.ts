@@ -18,7 +18,6 @@ import {RenderedWorkspaceComment} from '../comments/rendered_workspace_comment.j
 import {getFocusManager} from '../focus_manager.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import * as registry from '../registry.js';
-import {Renderer as Zelos} from '../renderers/zelos/renderer.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import {Marker} from './marker.js';
 
@@ -331,20 +330,37 @@ export class LineCursor extends Marker {
             return true;
           }
 
-          if (candidate instanceof BlockSvg) {
-            const outputTarget = candidate.outputConnection?.targetBlock();
-            if (
-              outputTarget &&
-              !outputTarget.getInputsInline() &&
-              !(this.workspace.getRenderer() instanceof Zelos)
-            ) {
-              const inputConnections =
-                outputTarget?.inputList.reduce((total, input) => {
-                  return total + (input.connection ? 1 : 0);
-                }, 0) ?? 0;
-
-              return inputConnections > 1;
+          const current = this.getSourceBlockFromNode(this.getCurNode());
+          if (candidate instanceof BlockSvg && current instanceof BlockSvg) {
+            // If the candidate's parent uses inline inputs, disallow the
+            // candidate; it must be on the same "row" as its parent.
+            if (candidate.outputConnection?.targetBlock()?.getInputsInline()) {
+              return false;
             }
+            const candidateParents = new Set<BlockSvg>();
+            let parent = candidate.getParent();
+            while (parent) {
+              // If the candidate is a indirect child of the current block,
+              // disallow it.
+              if (parent === current) return false;
+              candidateParents.add(parent);
+              parent = parent.getParent();
+            }
+
+            const currentParents = new Set<BlockSvg>();
+            parent = current.getParent();
+            while (parent) {
+              currentParents.add(parent);
+              parent = parent.getParent();
+            }
+
+            const sharedParents = currentParents.intersection(candidateParents);
+            // Allow the candidate if it and the current block have no parents
+            // in common, or if they have a shared parent with external inputs.
+            return (
+              !sharedParents.size ||
+              sharedParents.values().some((block) => !block.getInputsInline())
+            );
           }
 
           return false;
