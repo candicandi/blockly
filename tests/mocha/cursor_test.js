@@ -142,7 +142,7 @@ suite('Cursor', function () {
       this.cursor.setCurNode(prevConnectionNode);
       this.cursor.prev();
       const curNode = this.cursor.getCurNode();
-      assert.equal(curNode, this.blocks.A);
+      assert.equal(curNode, this.blocks.E);
     });
 
     test('Prev - From first block loop to last block', function () {

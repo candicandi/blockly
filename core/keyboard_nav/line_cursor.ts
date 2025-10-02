@@ -18,8 +18,19 @@ import {RenderedWorkspaceComment} from '../comments/rendered_workspace_comment.j
 import {getFocusManager} from '../focus_manager.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import * as registry from '../registry.js';
+import {Renderer as Zelos} from '../renderers/zelos/renderer.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import {Marker} from './marker.js';
+
+/**
+ * Representation of the direction of travel within a navigation context.
+ */
+export enum NavigationDirection {
+  NEXT,
+  PREVIOUS,
+  IN,
+  OUT,
+}
 
 /**
  * Class for a line cursor.
@@ -51,13 +62,7 @@ export class LineCursor extends Marker {
     }
     const newNode = this.getNextNode(
       curNode,
-      (candidate: IFocusableNode | null) => {
-        return (
-          (candidate instanceof BlockSvg &&
-            !candidate.outputConnection?.targetBlock()) ||
-          candidate instanceof RenderedWorkspaceComment
-        );
-      },
+      this.getValidationFunction(NavigationDirection.NEXT),
       true,
     );
 
@@ -80,7 +85,11 @@ export class LineCursor extends Marker {
       return null;
     }
 
-    const newNode = this.getNextNode(curNode, () => true, true);
+    const newNode = this.getNextNode(
+      curNode,
+      this.getValidationFunction(NavigationDirection.IN),
+      true,
+    );
 
     if (newNode) {
       this.setCurNode(newNode);
@@ -101,13 +110,7 @@ export class LineCursor extends Marker {
     }
     const newNode = this.getPreviousNode(
       curNode,
-      (candidate: IFocusableNode | null) => {
-        return (
-          (candidate instanceof BlockSvg &&
-            !candidate.outputConnection?.targetBlock()) ||
-          candidate instanceof RenderedWorkspaceComment
-        );
-      },
+      this.getValidationFunction(NavigationDirection.PREVIOUS),
       true,
     );
 
@@ -130,7 +133,11 @@ export class LineCursor extends Marker {
       return null;
     }
 
-    const newNode = this.getPreviousNode(curNode, () => true, true);
+    const newNode = this.getPreviousNode(
+      curNode,
+      this.getValidationFunction(NavigationDirection.OUT),
+      true,
+    );
 
     if (newNode) {
       this.setCurNode(newNode);
@@ -147,15 +154,14 @@ export class LineCursor extends Marker {
   atEndOfLine(): boolean {
     const curNode = this.getCurNode();
     if (!curNode) return false;
-    const inNode = this.getNextNode(curNode, () => true, true);
+    const inNode = this.getNextNode(
+      curNode,
+      this.getValidationFunction(NavigationDirection.IN),
+      true,
+    );
     const nextNode = this.getNextNode(
       curNode,
-      (candidate: IFocusableNode | null) => {
-        return (
-          candidate instanceof BlockSvg &&
-          !candidate.outputConnection?.targetBlock()
-        );
-      },
+      this.getValidationFunction(NavigationDirection.NEXT),
       true,
     );
 
@@ -296,6 +302,54 @@ export class LineCursor extends Marker {
       newNode = nextNode;
     }
     return this.getRightMostChild(newNode, stopIfFound);
+  }
+
+  /**
+   * Returns a function that will be used to determine whether a candidate for
+   * navigation is valid.
+   *
+   * @param direction The direction in which the user is navigating.
+   * @returns A function that takes a proposed navigation candidate and returns
+   *     true if navigation should be allowed to proceed to it, or false to find
+   *     a different candidate.
+   */
+  getValidationFunction(
+    direction: NavigationDirection,
+  ): (node: IFocusableNode | null) => boolean {
+    switch (direction) {
+      case NavigationDirection.IN:
+      case NavigationDirection.OUT:
+        return () => true;
+      case NavigationDirection.NEXT:
+      case NavigationDirection.PREVIOUS:
+        return (candidate: IFocusableNode | null) => {
+          if (
+            (candidate instanceof BlockSvg &&
+              !candidate.outputConnection?.targetBlock()) ||
+            candidate instanceof RenderedWorkspaceComment
+          ) {
+            return true;
+          }
+
+          if (candidate instanceof BlockSvg) {
+            const outputTarget = candidate.outputConnection?.targetBlock();
+            if (
+              outputTarget &&
+              !outputTarget.getInputsInline() &&
+              !(this.workspace.getRenderer() instanceof Zelos)
+            ) {
+              const inputConnections =
+                outputTarget?.inputList.reduce((total, input) => {
+                  return total + (input.connection ? 1 : 0);
+                }, 0) ?? 0;
+
+              return inputConnections > 1;
+            }
+          }
+
+          return false;
+        };
+    }
   }
 
   /**
