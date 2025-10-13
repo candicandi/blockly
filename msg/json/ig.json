@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Chikerenma Ndubuka",
 			"Mapmeld",
 			"Timzy D'Great",
 			"Ukabia"
@@ -19,6 +20,7 @@
 	"DELETE_X_BLOCKS": "Kpochapụ %1 Ngọngọ",
 	"DELETE_ALL_BLOCKS": "Mkpọchi %1 ngọngọ niile?",
 	"CLEAN_UP": "Hichapụ ngọngọ",
+	"CLOSE": "Mechie",
 	"COLLAPSE_BLOCK": "Kwada Ngọngọ",
 	"COLLAPSE_ALL": "Kwada Ngọngọ",
 	"EXPAND_BLOCK": "Gbasaa Ngọngọ",
