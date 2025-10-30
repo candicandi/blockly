@@ -348,5 +348,10 @@
 	"COLLAPSED_WARNINGS_WARNING": "Supistetut lohkot sisältävät varoituksia.",
 	"DIALOG_OK": "OK",
 	"DIALOG_CANCEL": "Peru",
-	"UNKNOWN": "Tuntematon"
+	"UNKNOWN": "Tuntematon",
+	"CUT_SHORTCUT": "Leikkaa",
+	"COPY_SHORTCUT": "Kopioi",
+	"PASTE_SHORTCUT": "Liitä",
+	"SHORTCUTS_GENERAL": "Yleinen",
+	"SHORTCUTS_EDITING": "Muokkaaminen"
 }
