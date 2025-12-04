@@ -90,7 +90,7 @@
 	"LOGIC_COMPARE_TOOLTIP_GT": "यदि दिइएका पहिलो, दोश्रो भन्दा ठुलो भए true फर्काउनुहोस।",
 	"LOGIC_COMPARE_TOOLTIP_GTE": "यदि दिइएका पहिलो, दोश्रो भन्दा ठुलो वा बराबर भए true फर्काउनुहोस।",
 	"LOGIC_OPERATION_TOOLTIP_AND": "यदि दिइएका दुबै सत्य भए true फर्काउनुहोस्।",
-	"LOGIC_OPERATION_AND": "and",
+	"LOGIC_OPERATION_AND": "र",
 	"LOGIC_OPERATION_TOOLTIP_OR": "यदि कम्तिमा एउटा दिइएको कुरा साँचो छ भने true फर्काउनुहोस्।",
 	"LOGIC_OPERATION_OR": "or",
 	"LOGIC_NEGATE_TITLE": "not %1",
