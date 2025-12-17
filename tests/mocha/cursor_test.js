@@ -11,7 +11,7 @@ import {
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
 
-suite.only('Cursor', function () {
+suite('Cursor', function () {
   suite('Movement', function () {
     setup(function () {
       sharedTestSetup.call(this);
