@@ -365,6 +365,7 @@ export class BlockSvg
       this.workspace.getCanvas().appendChild(svg);
     }
     this.initialized = true;
+    this.recomputeAriaLabel();
   }
 
   /**
